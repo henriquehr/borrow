@@ -20,7 +20,7 @@ import borrow.common.entity.Item;
 import borrow.common.entity.keys.PrimaryKeyItem;
 import borrow.common.repository.IRepository;
 
-public class ItemControllerTest {
+class ItemControllerTest {
   
   Controller<Item> controller;
   IRepository<Item> repository;
@@ -60,102 +60,102 @@ public class ItemControllerTest {
   }
 
   @Test
-  public void getAllItems_returnItemsList() {
+  void getAllItems_returnItemsList() {
     ResponseEntity<List<Item>> response = controller.getAllEntities();
     assertEquals(itemsList, response.getBody());
   }
 
   @Test
-  public void getAllItems_returnNullBody() {
+  void getAllItems_returnNullBody() {
     Mockito.when(repository.findAll()).thenReturn(List.of());
     ResponseEntity<List<Item>> response = controller.getAllEntities();
     assertEquals(null, response.getBody());
   }
 
   @Test
-  public void getAllItems_returnStatusOk() {
+  void getAllItems_returnStatusOk() {
     ResponseEntity<List<Item>> response = controller.getAllEntities();
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void getAllItems_returnStatusNoContent() {
+  void getAllItems_returnStatusNoContent() {
     Mockito.when(repository.findAll()).thenReturn(List.of());
     ResponseEntity<List<Item>> response = controller.getAllEntities();
     assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
   }
 
   @Test
-  public void getItemById_returnItem() {
+  void getItemById_returnItem() {
     ResponseEntity<List<Item>> response = controller.getEntitiesById(key.getId());
     assertEquals(itemsList, response.getBody());
   }
 
   @Test
-  public void getItemById_returnNullItem() {
+  void getItemById_returnNullItem() {
     Mockito.when(repository.findAllByKeyId(key.getId())).thenReturn(List.of());
     ResponseEntity<List<Item>> response = controller.getEntitiesById(key.getId());
     assertEquals(null, response.getBody());
   }
 
   @Test
-  public void getItemById_returnStatusOk() {
+  void getItemById_returnStatusOk() {
     ResponseEntity<List<Item>> response = controller.getEntitiesById(key.getId());
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void getItemById_returnStatusNotFound() {
+  void getItemById_returnStatusNotFound() {
     Mockito.when(repository.findAllByKeyId(key.getId())).thenReturn(List.of());
     ResponseEntity<List<Item>> response = controller.getEntitiesById(key.getId());
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
   }
 
   @Test
-  public void getItemByNameContaining_returnItemsList() {
+  void getItemByNameContaining_returnItemsList() {
     ResponseEntity<List<Item>> response = controller.getEntitiesByNameContaining(name);
     assertEquals(itemsList, response.getBody());
   }
 
   @Test
-  public void getItemByNameContaining_returnStatusOk() {
+  void getItemByNameContaining_returnStatusOk() {
     ResponseEntity<List<Item>> response = controller.getEntitiesByNameContaining(name);
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void getItemByDescriptionContaining_returnItemsList() {
+  void getItemByDescriptionContaining_returnItemsList() {
     ResponseEntity<List<Item>> response = controller.getEntitiesByDescriptionContaining(description);
     assertEquals(itemsList, response.getBody());
   }
 
   @Test
-  public void getItemByDescriptionContaining_returnStatusOk() {
+  void getItemByDescriptionContaining_returnStatusOk() {
     ResponseEntity<List<Item>> response = controller.getEntitiesByDescriptionContaining(description);
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void deleteItem_returnNoContent() {
+  void deleteItem_returnNoContent() {
     ResponseEntity<HttpStatus> response = controller.deleteEntity(item);
     assertEquals(null, response.getBody());
   }
 
   @Test
-  public void deleteItem_returnStatusNoContent() {
+  void deleteItem_returnStatusNoContent() {
     ResponseEntity<HttpStatus> response = controller.deleteEntity(item);
     assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
   }
 
   @Test
-  public void deleteItemById_returnNoContent() {
-    ResponseEntity<HttpStatus> response = controller.deleteEntityById(key.getId());
+  void deleteAllEntityById_returnNoContent() {
+    ResponseEntity<HttpStatus> response = controller.deleteAllEntityById(key.getId());
     assertEquals(null, response.getBody());
   }
 
   @Test
-  public void deleteItemById_returnStatusNoContent() {
-    ResponseEntity<HttpStatus> response = controller.deleteEntityById(key.getId());
+  void deleteAllEntityById_returnStatusNoContent() {
+    ResponseEntity<HttpStatus> response = controller.deleteAllEntityById(key.getId());
     assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
   }
 

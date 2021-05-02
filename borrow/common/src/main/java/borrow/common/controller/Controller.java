@@ -95,10 +95,10 @@ public class Controller<T> {
   }
 
   @DeleteMapping("/id/{id}")
-  public ResponseEntity<HttpStatus> deleteEntityById(@PathVariable UUID id) {
-    System.out.println("deleteEntityById("+id+")");
+  public ResponseEntity<HttpStatus> deleteAllEntityById(@PathVariable UUID id) {
+    System.out.println("deleteAllEntityById("+id+")");
     try {
-      repository.deleteByKeyId(id);
+      repository.deleteAllByKeyId(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
