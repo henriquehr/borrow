@@ -1,0 +1,23 @@
+CREATE TABLE borrow.category(
+  id timeuuid,
+  item_id timeuuid,
+  name text,
+  description text,
+  updated_at timestamp,
+  created_at timestamp,
+  PRIMARY KEY (id, item_id)
+);
+
+CREATE CUSTOM INDEX idx_category_name ON borrow.category (name) 
+USING 'org.apache.cassandra.index.sasi.SASIIndex' 
+WITH OPTIONS = {
+'mode': 'CONTAINS', 
+'analyzer_class': 'org.apache.cassandra.index.sasi.analyzer.NonTokenizingAnalyzer', 
+'case_sensitive': 'false'};
+
+CREATE CUSTOM INDEX idx_category_description ON borrow.category (description) 
+USING 'org.apache.cassandra.index.sasi.SASIIndex' 
+WITH OPTIONS = {
+'mode': 'CONTAINS', 
+'analyzer_class': 'org.apache.cassandra.index.sasi.analyzer.NonTokenizingAnalyzer', 
+'case_sensitive': 'false'};
