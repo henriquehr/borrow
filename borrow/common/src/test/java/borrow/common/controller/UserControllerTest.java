@@ -36,16 +36,19 @@ class UserControllerTest {
     UUID uuid = Uuids.timeBased(); 
     String cpf = "12345";
     String rg = "123";
-    key = new PrimaryKeyUser(uuid, cpf, rg);
+    String email = "email";
+    key = new PrimaryKeyUser(uuid, cpf, rg, email);
     name = "nameMock";
     description = "descMock";
     String firstName = "firstName"; 
     String middleName = "middleName"; 
     String lastName = "lastName";
     String phone = "phone";
+    String password = "pass";
     UUID addressUUID = Uuids.timeBased();
-    user = new User(key.getId(), key.getCpf(), key.getRg(), firstName, middleName, lastName, 
-    phone, addressUUID, name, description, Date.from(Instant.now()), Date.from(Instant.now()));
+    user = new User(key.getId(), key.getCpf(), key.getRg(), key.getEmail(), firstName, middleName, lastName, 
+        phone, password, addressUUID, name, description, Date.from(Instant.now()), Date.from(Instant.now()));
+
     usersList = List.of(user, user);
     repository = Mockito.mock(IRepository.class);
     controller = new Controller<User>(repository);

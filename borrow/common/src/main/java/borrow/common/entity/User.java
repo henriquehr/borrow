@@ -16,13 +16,14 @@ public class User extends Entity {
   private String middleName;
   private String lastName;
   private String phone;
+  private String password;
   private UUID addressUUID;
   
   public User() {}
 
   @PersistenceConstructor
   public User(PrimaryKeyUser key, String firstName, String middleName, String lastName, String phone, UUID addressUUID, 
-                                                    String name, String description, Date createdAt, Date updatedAt) {
+                                    String password, String name, String description, Date createdAt, Date updatedAt) {
 
     super(name, description, createdAt, updatedAt);
     this.key = key;
@@ -30,18 +31,20 @@ public class User extends Entity {
     this.middleName = middleName;
     this.lastName = lastName;
     this.phone = phone;
+    this.password = password;
     this.addressUUID = addressUUID;
   }
 
-  public User(UUID id, String cpf, String rg, String firstName, String middleName, String lastName,
-      String phone, UUID addressUUID, String name, String description, Date createdAt, Date updatedAt) {
+  public User(UUID id, String cpf, String rg, String email, String firstName, String middleName, String lastName, String phone, 
+                          String password, UUID addressUUID, String name, String description, Date createdAt, Date updatedAt) {
 
     super(name, description, createdAt, updatedAt);
-    this.key = new PrimaryKeyUser(id, cpf, rg);
+    this.key = new PrimaryKeyUser(id, cpf, rg, email);
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
     this.phone = phone;
+    this.password = password;
     this.addressUUID = addressUUID;
   }
 
@@ -85,18 +88,26 @@ public class User extends Entity {
     this.phone = phone;
   }
 
-  public UUID getAddress() {
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public UUID getAddressUUID() {
     return addressUUID;
   }
 
-  public void setAddress(UUID addressUUID) {
+  public void setAddressUUID(UUID addressUUID) {
     this.addressUUID = addressUUID;
   }
 
   @Override
   public String toString() {
-    return "User[addressUUID=" + addressUUID + ", firstName=" + firstName + ", key=" + key + ", lastName="
-        + lastName + ", middleName=" + middleName + ", phone=" + phone + ", " + super.toString() + "]";
+    return "User[key=" + key + ", addressUUID=" + addressUUID + ", firstName=" + firstName + ", lastName=" + lastName
+                                                          + ", middleName=" + middleName + ", phone=" + phone + "]";
   }
 
   @Override
@@ -152,6 +163,6 @@ public class User extends Entity {
     } else if (!phone.equals(other.phone))
       return false;
     return true;
-  }  
+  }
 
 }
