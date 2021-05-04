@@ -93,8 +93,8 @@ public class CategoryController extends Controller<Category> {
             return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
           } else {
             Category updatedCategory = filteredCategories.get(0);
-            new Category(oldCategory.getKey(), updatedCategory.getName(), updatedCategory.getDescription(), 
-                                                updatedCategory.getCreatedAt(), Date.from(Instant.now()));
+            updatedCategory = new Category(oldCategory.getKey(), updatedCategory.getName(), updatedCategory.getDescription(), 
+                                                                  updatedCategory.getCreatedAt(), Date.from(Instant.now()));
 
             return new ResponseEntity<>(getRepository().save(updatedCategory), HttpStatus.OK);
           }
