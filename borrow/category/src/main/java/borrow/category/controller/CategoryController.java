@@ -61,10 +61,10 @@ public class CategoryController extends Controller<Category> {
     System.out.println("createCategory("+category+")");
     try {
       PrimaryKeyCategory key = new PrimaryKeyCategory(Uuids.timeBased(), category.getKey().getItemId());
-      Category _category = getRepository().save(new Category(key, category.getName(), category.getDescription(), 
+      Category newCategory = getRepository().save(new Category(key, category.getName(), category.getDescription(), 
                                                             Date.from(Instant.now()), Date.from(Instant.now())));
 
-      return new ResponseEntity<>(_category, HttpStatus.CREATED);
+      return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,18 +86,17 @@ public class CategoryController extends Controller<Category> {
         if (foundCategories.isEmpty()) {
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-          List<Category> filteredCategories = foundCategories.stream().filter(x -> x.equals(oldCategory)).toList();
+          List<Category> filteredCategories = foundCategories.stream().filter(x -> x.equals(oldCategory)).collect(Collectors.toList());
           if (filteredCategories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           } else if (filteredCategories.size() > 1) {
             return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
           } else {
-            Category _category = filteredCategories.get(0);
-            _category.getKey().setItemId(newCategory.getKey().getItemId());
-            _category.setName(newCategory.getName());
-            _category.setDescription(newCategory.getDescription());
-            _category.setUpdatedAt(Date.from(Instant.now()));
-            return new ResponseEntity<>(getRepository().save(_category), HttpStatus.OK);
+            Category updatedCategory = filteredCategories.get(0);
+            new Category(oldCategory.getKey(), updatedCategory.getName(), updatedCategory.getDescription(), 
+                                                updatedCategory.getCreatedAt(), Date.from(Instant.now()));
+
+            return new ResponseEntity<>(getRepository().save(updatedCategory), HttpStatus.OK);
           }
         }
       } else {
