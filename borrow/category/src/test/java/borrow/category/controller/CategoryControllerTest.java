@@ -21,7 +21,7 @@ import borrow.category.repository.CategoryRepository;
 import borrow.common.entity.Category;
 import borrow.common.entity.keys.PrimaryKeyCategory;
 
-public class CategoryControllerTest {
+class CategoryControllerTest {
   
   CategoryController controller;
   CategoryRepository repository;
@@ -62,72 +62,72 @@ public class CategoryControllerTest {
   }
 
   @Test
-  public void getCategoryAllItemsIds_returnIdsList() {
+  void getCategoryAllItemsIds_returnIdsList() {
     ResponseEntity<List<UUID>> response = controller.getCategoryAllItemsIds(category.getKey().getId());
     assertEquals(idItemList, response.getBody());
   }
 
   @Test
-  public void getCategoryAllItemsIds_returnNull() {
+  void getCategoryAllItemsIds_returnNull() {
     Mockito.when(repository.findAllByKeyId(category.getKey().getId())).thenReturn(List.of());
     ResponseEntity<List<UUID>> response = controller.getCategoryAllItemsIds(category.getKey().getId());
     assertEquals(null, response.getBody());
   }
 
   @Test
-  public void getCategoryAllItemsIds_returnStatusOk() {
+  void getCategoryAllItemsIds_returnStatusOk() {
     ResponseEntity<List<UUID>> response = controller.getCategoryAllItemsIds(category.getKey().getId());
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }
   
   @Test
-  public void getCategoryAllItemsIds_returnStatusNotFound() {
+  void getCategoryAllItemsIds_returnStatusNotFound() {
     Mockito.when(repository.findAllByKeyId(category.getKey().getId())).thenReturn(List.of());
     ResponseEntity<List<UUID>> response = controller.getCategoryAllItemsIds(category.getKey().getId());
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
   }
 
   @Test
-  public void createCategory_returnCategory() {
+  void createCategory_returnCategory() {
     ResponseEntity<Category> response = controller.createCategory(category);
     assertEquals(category, response.getBody());
   }
 
   @Test
-  public void createCategory_returnStatusCreated() {
+  void createCategory_returnStatusCreated() {
     ResponseEntity<Category> response = controller.createCategory(category);
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
   }
 
   @Test
-  public void updateCategory_returnCategory() {
+  void updateCategory_returnCategory() {
     Mockito.when(repository.findAllByKeyId(category.getKey().getId())).thenReturn(List.of(category));
     ResponseEntity<Category> response = controller.updateCategory(Map.of("oldCategory", category, "newCategory", category));
     assertEquals(category, response.getBody());
   }
 
   @Test
-  public void updateCategory_returnNull() {
+  void updateCategory_returnNull() {
     Mockito.when(repository.findAllByKeyId(category.getKey().getId())).thenReturn(List.of());
     ResponseEntity<Category> response = controller.updateCategory(Map.of("oldCategory", category, "newCategory", category));
     assertEquals(null, response.getBody());
   }
 
   @Test
-  public void updateCategory_returnStatusOk() {
+  void updateCategory_returnStatusOk() {
     Mockito.when(repository.findAllByKeyId(category.getKey().getId())).thenReturn(List.of(category));
     ResponseEntity<Category> response = controller.updateCategory(Map.of("oldCategory", category, "newCategory", category));
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void updateCategory_returnStatusMultipleChoices() {
+  void updateCategory_returnStatusMultipleChoices() {
     ResponseEntity<Category> response = controller.updateCategory(Map.of("oldCategory", category, "newCategory", category));
     assertEquals(HttpStatus.MULTIPLE_CHOICES, response.getStatusCode());
   }
 
   @Test
-  public void updateCategory_returnNotFound() {
+  void updateCategory_returnNotFound() {
     Mockito.when(repository.findAllByKeyId(category.getKey().getId())).thenReturn(List.of());
     ResponseEntity<Category> response = controller.updateCategory(Map.of("oldCategory", category, "newCategory", category));
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
