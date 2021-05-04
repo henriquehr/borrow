@@ -37,7 +37,7 @@ class UserControllerTest {
     String cpf = "12345";
     String rg = "123";
     String email = "email";
-    key = new PrimaryKeyUser(uuid, cpf, rg, email);
+    key = new PrimaryKeyUser(uuid, cpf, rg);
     name = "nameMock";
     description = "descMock";
     String firstName = "firstName"; 
@@ -46,7 +46,7 @@ class UserControllerTest {
     String phone = "phone";
     String password = "pass";
     UUID addressUUID = Uuids.timeBased();
-    user = new User(key.getId(), key.getCpf(), key.getRg(), key.getEmail(), firstName, middleName, lastName, 
+    user = new User(key.getId(), key.getCpf(), key.getRg(), email, firstName, middleName, lastName, 
         phone, password, addressUUID, name, description, Date.from(Instant.now()), Date.from(Instant.now()));
 
     usersList = List.of(user, user);

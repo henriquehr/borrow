@@ -12,6 +12,7 @@ public class User extends Entity {
   
   @PrimaryKey
   private PrimaryKeyUser key;
+  private String email;
   private String firstName;
   private String middleName;
   private String lastName;
@@ -22,11 +23,12 @@ public class User extends Entity {
   public User() {}
 
   @PersistenceConstructor
-  public User(PrimaryKeyUser key, String firstName, String middleName, String lastName, String phone, UUID addressUUID, 
-                                    String password, String name, String description, Date createdAt, Date updatedAt) {
+  public User(PrimaryKeyUser key, String email, String firstName, String middleName, String lastName, String phone, 
+                UUID addressUUID, String password, String name, String description, Date createdAt, Date updatedAt) {
 
     super(name, description, createdAt, updatedAt);
     this.key = key;
+    this.email = email;
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
@@ -39,7 +41,8 @@ public class User extends Entity {
                           String password, UUID addressUUID, String name, String description, Date createdAt, Date updatedAt) {
 
     super(name, description, createdAt, updatedAt);
-    this.key = new PrimaryKeyUser(id, cpf, rg, email);
+    this.key = new PrimaryKeyUser(id, cpf, rg);
+    this.email = email;
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
@@ -54,6 +57,14 @@ public class User extends Entity {
   
   public void setKey(PrimaryKeyUser key) {
     this.key = key;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getFirstName() {
@@ -106,8 +117,8 @@ public class User extends Entity {
 
   @Override
   public String toString() {
-    return "User[key=" + key + ", addressUUID=" + addressUUID + ", firstName=" + firstName + ", lastName=" + lastName
-                                                          + ", middleName=" + middleName + ", phone=" + phone + "]";
+    return "User[key=" + key + ", email=" + email + ", addressUUID=" + addressUUID + ", firstName=" + firstName 
+    + ", lastName=" + lastName + ", middleName=" + middleName + ", phone=" + phone + ", " + super.toString() + "]";
   }
 
   @Override
@@ -115,10 +126,12 @@ public class User extends Entity {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((addressUUID == null) ? 0 : addressUUID.hashCode());
+    result = prime * result + ((email == null) ? 0 : email.hashCode());
     result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
     result = prime * result + ((key == null) ? 0 : key.hashCode());
     result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
     result = prime * result + ((middleName == null) ? 0 : middleName.hashCode());
+    result = prime * result + ((password == null) ? 0 : password.hashCode());
     result = prime * result + ((phone == null) ? 0 : phone.hashCode());
     return result;
   }
@@ -136,6 +149,11 @@ public class User extends Entity {
       if (other.addressUUID != null)
         return false;
     } else if (!addressUUID.equals(other.addressUUID))
+      return false;
+    if (email == null) {
+      if (other.email != null)
+        return false;
+    } else if (!email.equals(other.email))
       return false;
     if (firstName == null) {
       if (other.firstName != null)
@@ -156,6 +174,11 @@ public class User extends Entity {
       if (other.middleName != null)
         return false;
     } else if (!middleName.equals(other.middleName))
+      return false;
+    if (password == null) {
+      if (other.password != null)
+        return false;
+    } else if (!password.equals(other.password))
       return false;
     if (phone == null) {
       if (other.phone != null)
