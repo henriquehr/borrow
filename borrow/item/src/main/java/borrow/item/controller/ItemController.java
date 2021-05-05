@@ -61,10 +61,10 @@ public class ItemController extends Controller<Item> {
     System.out.println("createItem("+item+")");
     try {
       PrimaryKeyItem key = new PrimaryKeyItem(Uuids.timeBased(), item.getKey().getCategoryId());
-      Item _item = getRepository().save(new Item(key, item.getName(), item.getDescription(),item.getImageUrl(), 
+      Item newItem = getRepository().save(new Item(key, item.getName(), item.getDescription(),item.getImageUrl(), 
                                             item.getRate(), Date.from(Instant.now()), Date.from(Instant.now())));
 
-      return new ResponseEntity<>(_item, HttpStatus.CREATED);
+      return new ResponseEntity<>(newItem, HttpStatus.CREATED);
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,20 +86,17 @@ public class ItemController extends Controller<Item> {
         if (foundItems.isEmpty()) {
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-          List<Item> filteredItems = foundItems.stream().filter(x -> x.equals(oldItem)).toList();
+          List<Item> filteredItems = foundItems.stream().filter(x -> x.equals(oldItem)).collect(Collectors.toList());
           if (filteredItems.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           } else if (filteredItems.size() > 1) {
             return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
           } else {
-            Item _item = filteredItems.get(0);
-            _item.getKey().setCategoryId(newItem.getKey().getCategoryId());
-            _item.setName(newItem.getName());
-            _item.setDescription(newItem.getDescription());
-            _item.setImageUrl(newItem.getImageUrl());
-            _item.setRate(newItem.getRate());
-            _item.setUpdatedAt(Date.from(Instant.now()));
-            return new ResponseEntity<>(getRepository().save(_item), HttpStatus.OK);
+            Item updatedItem = filteredItems.get(0);
+            updatedItem = new Item(updatedItem.getKey(), newItem.getName(), newItem.getDescription(), newItem.getImageUrl(),
+                                                      newItem.getRate(), newItem.getCreatedAt(), Date.from(Instant.now()));
+            
+            return new ResponseEntity<>(getRepository().save(updatedItem), HttpStatus.OK);
           }
         }
       } else {
