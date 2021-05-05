@@ -12,10 +12,10 @@ public interface IRepository<T> extends CassandraRepository<T, UUID> {
   
   Optional<T> findByKeyId(UUID id);
   List<T> findAllByKeyId(UUID id);
-  List<T> findByName(String name);
-  List<T> findByNameContaining(String name);
-  List<T> findByDescription(String description);
-  List<T> findByDescriptionContaining(String description);
+  List<T> findAllByName(String name);
+  List<T> findAllByNameContaining(String name);
+  List<T> findAllByDescription(String description);
+  List<T> findAllByDescriptionContaining(String description);
   void deleteAllByKeyId(UUID id);
 
 }

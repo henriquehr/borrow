@@ -50,11 +50,11 @@ class ItemControllerTest {
     Mockito.when(repository.save(Mockito.any())).thenReturn(item);
     Mockito.when(repository.findAll()).thenReturn(itemsList);
     Mockito.when(repository.findById(key.getId())).thenReturn(Optional.of(item));
-    // Mockito.when(repository.findByKeyId(key.getId())).thenReturn(Optional.of(item));
+    Mockito.when(repository.findByKeyId(key.getId())).thenReturn(Optional.of(item));
     Mockito.when(repository.findAllByKeyId(key.getId())).thenReturn(itemsList);
-    Mockito.when(repository.findByName(name)).thenReturn(itemsList);
-    Mockito.when(repository.findByNameContaining(name)).thenReturn(itemsList);
-    Mockito.when(repository.findByDescriptionContaining(description)).thenReturn(itemsList);
+    Mockito.when(repository.findAllByName(name)).thenReturn(itemsList);
+    Mockito.when(repository.findAllByNameContaining(name)).thenReturn(itemsList);
+    Mockito.when(repository.findAllByDescriptionContaining(description)).thenReturn(itemsList);
     Mockito.doNothing().when(repository).delete(item);
     Mockito.doNothing().when(repository).deleteById(key.getId());
   }

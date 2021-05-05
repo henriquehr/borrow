@@ -52,9 +52,9 @@ class AddressControllerTest {
     Mockito.when(repository.findAll()).thenReturn(addressesList);
     Mockito.when(repository.findById(key.getId())).thenReturn(Optional.of(address));
     Mockito.when(repository.findAllByKeyId(key.getId())).thenReturn(addressesList);
-    Mockito.when(repository.findByName(name)).thenReturn(addressesList);
-    Mockito.when(repository.findByNameContaining(name)).thenReturn(addressesList);
-    Mockito.when(repository.findByDescriptionContaining(description)).thenReturn(addressesList);
+    Mockito.when(repository.findAllByName(name)).thenReturn(addressesList);
+    Mockito.when(repository.findAllByNameContaining(name)).thenReturn(addressesList);
+    Mockito.when(repository.findAllByDescriptionContaining(description)).thenReturn(addressesList);
     Mockito.doNothing().when(repository).delete(address);
     Mockito.doNothing().when(repository).deleteById(key.getId());
   }

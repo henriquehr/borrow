@@ -52,9 +52,9 @@ class CategoryControllerTest {
     Mockito.when(repository.findById(key.getId())).thenReturn(Optional.of(category));
     // Mockito.when(repository.findByKeyId(key.getId())).thenReturn(Optional.of(category));
     Mockito.when(repository.findAllByKeyId(key.getId())).thenReturn(categoryList);
-    Mockito.when(repository.findByName(name)).thenReturn(categoryList);
-    Mockito.when(repository.findByNameContaining(name)).thenReturn(categoryList);
-    Mockito.when(repository.findByDescriptionContaining(description)).thenReturn(categoryList);
+    Mockito.when(repository.findAllByName(name)).thenReturn(categoryList);
+    Mockito.when(repository.findAllByNameContaining(name)).thenReturn(categoryList);
+    Mockito.when(repository.findAllByDescriptionContaining(description)).thenReturn(categoryList);
     Mockito.doNothing().when(repository).delete(category);
     Mockito.doNothing().when(repository).deleteAllByKeyId(key.getId());
   }

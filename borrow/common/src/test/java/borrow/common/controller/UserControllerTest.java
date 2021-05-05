@@ -56,9 +56,9 @@ class UserControllerTest {
     Mockito.when(repository.findAll()).thenReturn(usersList);
     Mockito.when(repository.findById(key.getId())).thenReturn(Optional.of(user));
     Mockito.when(repository.findAllByKeyId(key.getId())).thenReturn(usersList);
-    Mockito.when(repository.findByName(name)).thenReturn(usersList);
-    Mockito.when(repository.findByNameContaining(name)).thenReturn(usersList);
-    Mockito.when(repository.findByDescriptionContaining(description)).thenReturn(usersList);
+    Mockito.when(repository.findAllByName(name)).thenReturn(usersList);
+    Mockito.when(repository.findAllByNameContaining(name)).thenReturn(usersList);
+    Mockito.when(repository.findAllByDescriptionContaining(description)).thenReturn(usersList);
     Mockito.doNothing().when(repository).delete(user);
     Mockito.doNothing().when(repository).deleteById(key.getId());
   }

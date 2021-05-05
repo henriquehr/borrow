@@ -62,7 +62,7 @@ public class Controller<T> {
   public ResponseEntity<List<T>> getEntitiesByNameContaining(@PathVariable String name) {
     System.out.println("getEntitiesByNameContaining("+name+")");
     try {
-      List<T> entity = repository.findByNameContaining(name);
+      List<T> entity = repository.findAllByNameContaining(name);
       return new ResponseEntity<>(entity, HttpStatus.OK);
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
@@ -74,7 +74,7 @@ public class Controller<T> {
   public ResponseEntity<List<T>> getEntitiesByDescriptionContaining(@PathVariable String description) {
     System.out.println("getEntitiesByDescriptionContaining("+description+")");
     try {
-      List<T> entity = repository.findByDescriptionContaining(description);
+      List<T> entity = repository.findAllByDescriptionContaining(description);
       return new ResponseEntity<>(entity, HttpStatus.OK);
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
