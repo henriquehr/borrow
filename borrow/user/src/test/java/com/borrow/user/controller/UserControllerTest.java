@@ -338,32 +338,6 @@ class UserControllerTest {
   }
 
   @Test
-  void getUserByAnyName_returnUserList() {
-    ResponseEntity<List<User>> response = controller.getUserByAnyName(user.getName());
-    assertEquals(usersList, response.getBody());
-  }
-
-  @Test
-  void getUserByAnyName_returnNull() {
-    Mockito.when(repository.findAllByNameContaining(user.getName())).thenReturn(List.of());
-    ResponseEntity<List<User>> response = controller.getUserByAnyName(user.getName());
-    assertEquals(null, response.getBody());
-  }
-
-  @Test
-  void getUserByAnyName_returnStatusOk() {
-    ResponseEntity<List<User>> response = controller.getUserByAnyName(user.getName());
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-  }
-  
-  @Test
-  void getUserByAnyName_returnStatusNotFound() {
-    Mockito.when(repository.findAllByNameContaining(user.getName())).thenReturn(List.of());
-    ResponseEntity<List<User>> response = controller.getUserByAnyName(user.getName());
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-  }
-
-  @Test
   void getAllUsersByEmail_returnUserList() {
     ResponseEntity<List<User>> response = controller.getAllUsersByEmail(user.getEmail());
     assertEquals(usersList, response.getBody());
