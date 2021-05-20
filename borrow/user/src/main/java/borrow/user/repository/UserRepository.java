@@ -17,6 +17,6 @@ public interface UserRepository extends IRepository<User> {
   List<User> findAllByFirstNameContaining(String firstName);
   List<User> findAllByMiddleNameContaining(String middleName);
   List<User> findAllByLastNameContaining(String lastName);
-  List<User> findAllByAddressUuid(UUID uuid);
+  List<User> findAllByAddressUUID(UUID uuid);
 
 }
