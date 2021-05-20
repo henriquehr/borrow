@@ -1,13 +1,10 @@
 package borrow.user.controller;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -273,30 +270,6 @@ public class UserController extends Controller<User> {
           return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-      }
-    } catch (Exception e) {
-      System.out.println(Throwables.getStackTraceAsString(e));
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-  
-  @GetMapping("/name/{name}")
-  public ResponseEntity<List<User>> getUserByAnyName(@PathVariable String name) {
-    System.out.println("getUserByAnyName("+name+")");
-    try {
-      if (name != null) {
-        List<User> users = new ArrayList<>();
-        users.addAll(((UserRepository) getRepository()).findAllByNameContaining(name));
-        // users.addAll(((UserRepository) getRepository()).findAllByFirstNameContaining(name));
-        // users.addAll(((UserRepository) getRepository()).findAllByMiddleNameContaining(name));
-        // users.addAll(((UserRepository) getRepository()).findAllByLastNameContaining(name));
-        if (users.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-          return new ResponseEntity<>(users, HttpStatus.OK);
         }
       } else {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
