@@ -3,7 +3,10 @@ package borrow.common.entity;
 import java.util.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 
 import borrow.common.entity.keys.PrimaryKeyUser;
@@ -17,7 +20,9 @@ public class User extends Entity {
   private String middleName;
   private String lastName;
   private String phone;
+  @JsonIgnore
   private String password;
+  @Column("address_uuid")
   private UUID addressUUID;
   
   public User() {}
