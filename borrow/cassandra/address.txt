@@ -1,6 +1,5 @@
 CREATE TABLE borrow.address (
    id timeuuid,
-   address timeuuid,
    name text,
    description text,
    country text,
@@ -21,28 +20,28 @@ WITH OPTIONS = {
 'analyzer_class': 'org.apache.cassandra.index.sasi.analyzer.NonTokenizingAnalyzer', 
 'case_sensitive': 'false'};
 
-CREATE CUSTOM INDEX idx_address_name ON borrow.country (name) 
+CREATE CUSTOM INDEX idx_address_country ON borrow.address (country) 
 USING 'org.apache.cassandra.index.sasi.SASIIndex' 
 WITH OPTIONS = {
 'mode': 'CONTAINS', 
 'analyzer_class': 'org.apache.cassandra.index.sasi.analyzer.NonTokenizingAnalyzer', 
 'case_sensitive': 'false'};
 
-CREATE CUSTOM INDEX idx_address_name ON borrow.state (name) 
+CREATE CUSTOM INDEX idx_address_state ON borrow.address (state) 
 USING 'org.apache.cassandra.index.sasi.SASIIndex' 
 WITH OPTIONS = {
 'mode': 'CONTAINS', 
 'analyzer_class': 'org.apache.cassandra.index.sasi.analyzer.NonTokenizingAnalyzer', 
 'case_sensitive': 'false'};
 
-CREATE CUSTOM INDEX idx_address_name ON borrow.city (name) 
+CREATE CUSTOM INDEX idx_address_city ON borrow.address (city) 
 USING 'org.apache.cassandra.index.sasi.SASIIndex' 
 WITH OPTIONS = {
 'mode': 'CONTAINS', 
 'analyzer_class': 'org.apache.cassandra.index.sasi.analyzer.NonTokenizingAnalyzer', 
 'case_sensitive': 'false'};
 
-CREATE CUSTOM INDEX idx_address_name ON borrow.street (name) 
+CREATE CUSTOM INDEX idx_address_street ON borrow.address (street) 
 USING 'org.apache.cassandra.index.sasi.SASIIndex' 
 WITH OPTIONS = {
 'mode': 'CONTAINS', 
