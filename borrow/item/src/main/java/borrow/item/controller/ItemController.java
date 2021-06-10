@@ -4,8 +4,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.google.common.base.Throwables;
@@ -34,22 +34,23 @@ public class ItemController extends Controller<Item> {
   public ItemController(ItemRepository repository) {
     super(repository);
   }
-  
+
   @GetMapping("/id/{id}/category")
   public ResponseEntity<List<UUID>> getItemAllCategoriesIds(@PathVariable UUID id) {
     System.out.println("getItemAllCategoriesIds("+id+")");
     try {
-      if (id != null) {
-        List<Item> items = getRepository().findAllByKeyId(id);
-        if (items.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-          List<UUID> ids = items.stream().map(x -> x.getKey().getCategoryId()).collect(Collectors.toList());
-          return new ResponseEntity<>(ids, HttpStatus.OK);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+
+      return Optional.of(getRepository().findAllByKeyId(id)).
+                                         map(i -> i.isEmpty() ? null : i).
+                                         map(i -> i.stream().
+                                                    map(Item::getKey).
+                                                    map(PrimaryKeyItem::getCategoryId).toList()).
+                                         map(this::responseOk).
+                                         orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,6 +61,9 @@ public class ItemController extends Controller<Item> {
   public ResponseEntity<Item> createItem(@RequestBody Item item) {
     System.out.println("createItem("+item+")");
     try {
+      if (item == null) {
+        return responseNotFound();
+      }
       PrimaryKeyItem key = new PrimaryKeyItem(Uuids.timeBased(), item.getKey().getCategoryId());
       Item newItem = getRepository().save(new Item(key, item.getName(), item.getDescription(),item.getImageUrl(), 
                                             item.getRate(), Date.from(Instant.now()), Date.from(Instant.now())));
@@ -75,33 +79,32 @@ public class ItemController extends Controller<Item> {
   public ResponseEntity<Item> updateItem(@RequestBody Map<String, Item> items) {
     System.out.println("updateItem("+items+")");
     try {
-      Item oldItem = items.get("oldItem");
-      Item newItem = items.get("newItem");
-      if (newItem == null || oldItem == null) {
+      Optional<Item> oldItem = Optional.ofNullable(items.get("oldItem"));
+      Optional<Item> newItem = Optional.ofNullable(items.get("newItem"));
+      if (newItem.isEmpty() || oldItem.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
       }
-      UUID id = oldItem.getKey().getId();
-      if(id != null) {
-        List<Item> foundItems = getRepository().findAllByKeyId(id);
-        if (foundItems.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-          List<Item> filteredItems = foundItems.stream().filter(x -> x.equals(oldItem)).collect(Collectors.toList());
-          if (filteredItems.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-          } else if (filteredItems.size() > 1) {
-            return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
-          } else {
-            Item updatedItem = filteredItems.get(0);
-            updatedItem = new Item(updatedItem.getKey(), newItem.getName(), newItem.getDescription(), newItem.getImageUrl(),
-                                                      newItem.getRate(), newItem.getCreatedAt(), Date.from(Instant.now()));
-            
-            return new ResponseEntity<>(getRepository().save(updatedItem), HttpStatus.OK);
-          }
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+      List<Item> filteredItems = oldItem.map(Item::getKey).
+                                         map(PrimaryKeyItem::getId).
+                                         map(id -> getRepository().findAllByKeyId(id)).
+                                         map(u -> u.stream().filter(x -> x.equals(oldItem.get())).toList()).
+                                         orElse(List.of());
+
+      if (filteredItems.size() > 1) {
+        return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
       }
+      if (filteredItems.isEmpty()) {
+        return responseNotFound();
+      }
+      return Optional.of(filteredItems).
+                      map(fu ->  fu.get(0)).
+                      map(updatedItem -> new Item(filteredItems.get(0).getKey(), newItem.get().getName(), newItem.get().getDescription(), 
+                                                  newItem.get().getImageUrl(), newItem.get().getRate(), newItem.get().getCreatedAt(), 
+                                                  Date.from(Instant.now()))).
+                      map(this::responseOk).
+                      orElseGet(this::responseNotFound);
+      
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

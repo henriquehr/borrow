@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.google.common.base.Throwables;
@@ -44,18 +43,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserName(@PathVariable UUID id) {
     System.out.println("getUserName("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String name = user.getName();
-          return new ResponseEntity<>(name, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) { 
+        return responseNotFound();
       }
+      return getUser(id).map(User::getName).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -66,18 +60,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserFirstName(@PathVariable UUID id) {
     System.out.println("getUserFirstName("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String name = user.getFirstName();
-          return new ResponseEntity<>(name, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getFirstName).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -88,18 +77,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserMiddleName(@PathVariable UUID id) {
     System.out.println("getUserMiddleName("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String name = user.getMiddleName();
-          return new ResponseEntity<>(name, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getMiddleName).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,18 +94,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserLastName(@PathVariable UUID id) {
     System.out.println("getUserLastName("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String name = user.getLastName();
-          return new ResponseEntity<>(name, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getLastName).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -132,18 +111,14 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserCpf(@PathVariable UUID id) {
     System.out.println("getUserCpf("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String cpf = user.getKey().getCpf();
-          return new ResponseEntity<>(cpf, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getKey).
+                         map(PrimaryKeyUser::getCpf).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+      
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -154,18 +129,14 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserRg(@PathVariable UUID id) {
     System.out.println("getUserRg("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String rg = user.getKey().getRg();
-          return new ResponseEntity<>(rg, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getKey).
+                         map(PrimaryKeyUser::getRg).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+     
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -176,18 +147,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserEmail(@PathVariable UUID id) {
     System.out.println("getUserEmail("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String email = user.getEmail();
-          return new ResponseEntity<>(email, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getEmail).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+      
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -198,18 +164,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<UUID> getUserAddressUUID(@PathVariable UUID id) {
     System.out.println("getUserAddressUUID("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          UUID uuid = user.getAddressUUID();
-          return new ResponseEntity<>(uuid, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getAddressUUID).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+        
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -220,18 +181,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<String> getUserPhone(@PathVariable UUID id) {
     System.out.println("getUserPhone("+id+")");
     try {
-      if (id != null) {
-        Optional<User> userOpt = getUser(id);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          String phone = user.getPhone();
-          return new ResponseEntity<>(phone, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return getUser(id).map(User::getPhone).
+                         map(this::responseOk).
+                         orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -242,17 +198,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<User> getUserByCpf(@PathVariable String cpf) {
     System.out.println("getUserByCpf("+cpf+")");
     try {
-      if (cpf != null) {
-        Optional<User> userOpt = ((UserRepository) getRepository()).findByKeyCpf(cpf);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (cpf == null) {
+        return responseNotFound();
       }
+      return ((UserRepository) getRepository()).findByKeyCpf(cpf).
+                                                map(this::responseOk).
+                                                orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -263,17 +215,13 @@ public class UserController extends Controller<User> {
   public ResponseEntity<User> getUserByRg(@PathVariable String rg) {
     System.out.println("getUserByRg("+rg+")");
     try {
-      if (rg != null) {
-        Optional<User> userOpt = ((UserRepository) getRepository()).findByKeyRg(rg);
-        if (userOpt.isPresent()) {
-          User user = userOpt.get();
-          return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (rg == null) {
+        return responseNotFound();
       }
+      return ((UserRepository) getRepository()).findByKeyRg(rg).
+                                                map(this::responseOk).
+                                                orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -284,16 +232,14 @@ public class UserController extends Controller<User> {
   public ResponseEntity<List<User>> getAllUsersByEmail(@PathVariable String email) {
     System.out.println("getAllUsersByEmail("+email+")");
     try {
-      if (email != null) {
-        List<User> users = ((UserRepository) getRepository()).findAllByEmailContaining(email);
-        if (users.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-          return new ResponseEntity<>(users, HttpStatus.OK);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (email == null) {
+        return responseNotFound();
       }
+      return Optional.of(((UserRepository) getRepository()).findAllByEmailContaining(email)).
+                                                            map(x -> x.isEmpty() ? null : x).
+                                                            map(this::responseOk).
+                                                            orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -304,13 +250,16 @@ public class UserController extends Controller<User> {
   public ResponseEntity<User> createUser(@RequestBody User user) {
     System.out.println("createUser("+user+")");
     try {
+      if (user == null) {
+        return responseNotFound();
+      }
       PrimaryKeyUser key = new PrimaryKeyUser(Uuids.timeBased(), user.getKey().getCpf(), user.getKey().getRg());
 
       String name = user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName();
 
       User newUser = getRepository().save(new User(key, user.getEmail(), user.getFirstName(), user.getMiddleName(), 
-                              user.getLastName(), user.getPhone(), user.getAddressUUID(), user.getPassword(), name,
-                                       user.getDescription(), Date.from(Instant.now()), Date.from(Instant.now())));
+                                          user.getLastName(), user.getPhone(), user.getAddressUUID(), user.getPassword(), 
+                                          name, user.getDescription(), Date.from(Instant.now()), Date.from(Instant.now())));
 
       return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     } catch (Exception e) {
@@ -323,35 +272,34 @@ public class UserController extends Controller<User> {
   public ResponseEntity<User> updateUser(@RequestBody Map<String, User> users) {
     System.out.println("updateUser("+users+")");
     try {
-      User oldUser = users.get("oldUser");
-      User newUser = users.get("newUser");
-      if (newUser == null || oldUser == null) {
+      Optional<User> oldUser = Optional.ofNullable(users.get("oldUser"));
+      Optional<User> newUser = Optional.ofNullable(users.get("newUser"));
+      if (newUser.isEmpty() || oldUser.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
       }
-      UUID id = oldUser.getKey().getId();
-      if(id != null) {
-        List<User> foundUsers = getRepository().findAllByKeyId(id);
-        if (foundUsers.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-          List<User> filteredUsers = foundUsers.stream().filter(x -> x.equals(oldUser)).collect(Collectors.toList());
-          if (filteredUsers.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-          } else if (filteredUsers.size() > 1) {
-            return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
-          } else {
-            User updatedUser = filteredUsers.get(0);
-            updatedUser = new User(oldUser.getKey(), updatedUser.getEmail(), updatedUser.getFirstName(), updatedUser.getMiddleName(), 
-                                       updatedUser.getLastName(), updatedUser.getPhone(), updatedUser.getAddressUUID(), 
-                                        updatedUser.getPassword(), updatedUser.getName(), updatedUser.getDescription(), 
-                                                                updatedUser.getCreatedAt(), Date.from(Instant.now()));
-            
-            return new ResponseEntity<>(getRepository().save(updatedUser), HttpStatus.OK);
-          }
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+      List<User> filteredUsers = oldUser.map(User::getKey).
+                                         map(PrimaryKeyUser::getId).
+                                         map(id -> getRepository().findAllByKeyId(id)).
+                                         map(u -> u.stream().filter(x -> x.equals(oldUser.get())).toList()).
+                                         orElse(List.of());
+               
+      if (filteredUsers.size() > 1) {
+        return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
       }
+      if (filteredUsers.isEmpty()) {
+        return responseNotFound();
+      }
+      return Optional.of(filteredUsers).
+                      map(fu ->  fu.get(0)).
+                      map(updatedUser -> new User(updatedUser.getKey(), newUser.get().getEmail(), newUser.get().getFirstName(), 
+                                                 newUser.get().getMiddleName(), newUser.get().getLastName(), newUser.get().getPhone(), 
+                                                 newUser.get().getAddressUUID(), newUser.get().getPassword(), newUser.get().getName(), 
+                                                 newUser.get().getDescription(), newUser.get().getCreatedAt(), 
+                                                 Date.from(Instant.now()))).
+                      map(this::responseOk).
+                      orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

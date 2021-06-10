@@ -4,8 +4,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.google.common.base.Throwables;
@@ -39,17 +39,17 @@ public class CategoryController extends Controller<Category> {
   public ResponseEntity<List<UUID>> getCategoryAllItemsIds(@PathVariable UUID id) {
     System.out.println("getCategoryAllItemsIds("+id+")");
     try {
-      if (id != null) {
-        List<Category> categories = getRepository().findAllByKeyId(id);
-        if (categories.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-          List<UUID> ids = categories.stream().map(x -> x.getKey().getItemId()).collect(Collectors.toList());
-          return new ResponseEntity<>(ids, HttpStatus.OK);
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (id == null) {
+        return responseNotFound();
       }
+      return Optional.of(getRepository().findAllByKeyId(id)).
+                                         map(c -> c.isEmpty() ? null : c).
+                                         map(c -> c.stream().
+                                                    map(Category::getKey).
+                                                    map(PrimaryKeyCategory::getItemId).toList()).
+                                         map(this::responseOk).
+                                         orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,33 +75,31 @@ public class CategoryController extends Controller<Category> {
   public ResponseEntity<Category> updateCategory(@RequestBody Map<String, Category> categories) {
     System.out.println("updateCategory("+categories+")");
     try {
-      Category oldCategory = categories.get("oldCategory");
-      Category newCategory = categories.get("newCategory");
-      if (oldCategory == null || newCategory == null) {
+      Optional<Category> oldCategory = Optional.ofNullable(categories.get("oldCategory"));
+      Optional<Category> newCategory = Optional.ofNullable(categories.get("newCategory"));
+      if (oldCategory.isEmpty() || newCategory.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
       }
-      UUID id = oldCategory.getKey().getId();
-      if(id != null) {
-        List<Category> foundCategories = getRepository().findAllByKeyId(id);
-        if (foundCategories.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-          List<Category> filteredCategories = foundCategories.stream().filter(x -> x.equals(oldCategory)).collect(Collectors.toList());
-          if (filteredCategories.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-          } else if (filteredCategories.size() > 1) {
-            return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
-          } else {
-            Category updatedCategory = filteredCategories.get(0);
-            updatedCategory = new Category(updatedCategory.getKey(), newCategory.getName(), newCategory.getDescription(), 
-                                                                   newCategory.getCreatedAt(), Date.from(Instant.now()));
+      List<Category> filteredCategories = oldCategory.map(Category::getKey).
+                                         map(PrimaryKeyCategory::getId).
+                                         map(id -> getRepository().findAllByKeyId(id)).
+                                         map(u -> u.stream().filter(x -> x.equals(oldCategory.get())).toList()).
+                                         orElse(List.of());
 
-            return new ResponseEntity<>(getRepository().save(updatedCategory), HttpStatus.OK);
-          }
-        }
-      } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      if (filteredCategories.size() > 1) {
+        return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
       }
+      if (filteredCategories.isEmpty()) {
+        return responseNotFound();
+      }
+      return Optional.of(filteredCategories).
+                      map(fu ->  fu.get(0)).
+                      map(updatedCategory -> new Category(updatedCategory.getKey(), newCategory.get().getName(), 
+                                                  newCategory.get().getDescription(), newCategory.get().getCreatedAt(), 
+                                                  Date.from(Instant.now()))).
+                      map(this::responseOk).
+                      orElseGet(this::responseNotFound);
+
     } catch (Exception e) {
       System.out.println(Throwables.getStackTraceAsString(e));
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
