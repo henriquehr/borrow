@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/v1/item")
+@RequestMapping("/api/v1/item")
 public class Item extends Entity<Item> {
 
-  private String servicePath = "/" + getClass().getName().toLowerCase();
+  private String servicePath = "/" + getClass().getSimpleName().toLowerCase();
 
   @Autowired
   public Item(WebClient webClient) {

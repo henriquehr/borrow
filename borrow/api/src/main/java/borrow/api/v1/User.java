@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/v1/user")
+@RequestMapping("/api/v1/user")
 public class User extends Entity<User> {
 
-  private String servicePath = "/" + getClass().getName().toLowerCase();
+  private String servicePath = "/" + getClass().getSimpleName().toLowerCase();
 
   @Autowired
   public User(WebClient webClient) {

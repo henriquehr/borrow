@@ -27,7 +27,7 @@ import borrow.common.entity.keys.PrimaryKeyItem;
 import borrow.item.repository.ItemRepository;
 
 @RestController
-@RequestMapping("/api/item")
+@RequestMapping("/item")
 public class ItemController extends Controller<Item> {
 
   @Autowired
@@ -101,7 +101,8 @@ public class ItemController extends Controller<Item> {
                       map(fu ->  fu.get(0)).
                       map(updatedItem -> new Item(filteredItems.get(0).getKey(), newItem.get().getName(), newItem.get().getDescription(), 
                                                   newItem.get().getImageUrl(), newItem.get().getRate(), newItem.get().getCreatedAt(), 
-                                                  Date.from(Instant.now()))).
+                                                  Date.from(Instant.now()))
+                      ).
                       map(this::responseOk).
                       orElseGet(this::responseNotFound);
       

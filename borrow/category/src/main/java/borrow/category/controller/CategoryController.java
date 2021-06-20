@@ -27,7 +27,7 @@ import borrow.common.entity.Category;
 import borrow.common.entity.keys.PrimaryKeyCategory;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/category")
 public class CategoryController extends Controller<Category> {
 
   @Autowired

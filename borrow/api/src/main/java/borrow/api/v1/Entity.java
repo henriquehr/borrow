@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 
 public class Entity<T> {
 
-  private String baseUrl = "/v1";
+  private String baseUrl = "";
   private WebClient webClient;
 
   public Entity(WebClient webClient) {
@@ -34,6 +34,7 @@ public class Entity<T> {
   }
 
   public <R> ResponseEntity<R> getEntity(String servicePath, String params, Class<R> returnClass) {
+    System.out.println(baseUrl + servicePath + params + ", " + returnClass);
     return webClient.method(HttpMethod.GET).
                      uri(baseUrl + servicePath + params).
                      retrieve().
@@ -42,6 +43,7 @@ public class Entity<T> {
   }
 
   public <R> ResponseEntity<R> postEntity(String servicePath, String params, T requestBody, Class<R> returnClass) {
+    System.out.println(baseUrl + servicePath + params + " {" + requestBody + "}, " + returnClass);
     return webClient.method(HttpMethod.POST).
                      uri(baseUrl + servicePath + params).
                      body(BodyInserters.fromProducer(requestBody, requestBody.getClass())).
@@ -51,6 +53,7 @@ public class Entity<T> {
   }
 
   public <R> ResponseEntity<R> putEntity(String servicePath, String params, Map<String, T> requestBody, Class<R> returnClass) {
+    System.out.println(baseUrl + servicePath + params + " {" + requestBody + "}, " + returnClass);
     return webClient.method(HttpMethod.PUT).
                      uri(baseUrl + servicePath + params).
                      body(BodyInserters.fromProducer(requestBody, requestBody.getClass())).
@@ -60,6 +63,7 @@ public class Entity<T> {
   }
 
   public ResponseEntity<HttpStatus> deleteEntity(String servicePath, String params, T requestBody) {
+    System.out.println(baseUrl + servicePath + params + " {" + requestBody + "}");
     return webClient.method(HttpMethod.DELETE).
                      uri(baseUrl + servicePath + params).
                      body(BodyInserters.fromProducer(requestBody, requestBody.getClass())).
@@ -69,6 +73,7 @@ public class Entity<T> {
   }
 
   public ResponseEntity<HttpStatus> deleteEntity(String servicePath, String params) {
+    System.out.println(baseUrl + servicePath + params);
     return webClient.method(HttpMethod.DELETE).
                      uri(baseUrl + servicePath + params).
                      retrieve().

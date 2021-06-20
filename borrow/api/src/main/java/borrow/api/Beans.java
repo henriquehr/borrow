@@ -11,7 +11,7 @@ public class Beans {
     
   @Bean
   public WebClient localApiClient() {
-      return WebClient.create("http://localhost:8080/api");
+      return WebClient.create("http://localhost:8080/");
   }
 
 }

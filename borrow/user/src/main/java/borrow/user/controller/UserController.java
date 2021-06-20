@@ -27,7 +27,7 @@ import borrow.common.entity.keys.PrimaryKeyUser;
 import borrow.user.repository.UserRepository;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController extends Controller<User> {
 
   @Autowired
@@ -296,7 +296,8 @@ public class UserController extends Controller<User> {
                                                  newUser.get().getMiddleName(), newUser.get().getLastName(), newUser.get().getPhone(), 
                                                  newUser.get().getAddressUUID(), newUser.get().getPassword(), newUser.get().getName(), 
                                                  newUser.get().getDescription(), newUser.get().getCreatedAt(), 
-                                                 Date.from(Instant.now()))).
+                                                 Date.from(Instant.now()))
+                      ).
                       map(this::responseOk).
                       orElseGet(this::responseNotFound);
 
