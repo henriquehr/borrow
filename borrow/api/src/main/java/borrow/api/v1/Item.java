@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/v1/user")
+@RequestMapping("/v1/item")
 public class Item extends Entity<Item> {
 
   private String servicePath = "/" + getClass().getName().toLowerCase();
