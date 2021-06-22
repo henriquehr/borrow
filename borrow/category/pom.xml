@@ -69,11 +69,11 @@
 	</build>
 	<repositories>
     
-    <repository> 
+    <!-- <repository> 
       <id>borrow</id> 
       <name>borrow common</name> 
       <url>http://192.168.15.7:8081/repository/maven-releases/</url>
-    </repository>
+    </repository> -->
 
 		<repository>
 			<id>spring-milestones</id>

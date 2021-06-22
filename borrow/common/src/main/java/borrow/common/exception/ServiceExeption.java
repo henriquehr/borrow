@@ -3,6 +3,8 @@ package borrow.common.exception;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import org.springframework.http.HttpStatus;
 
 public class ServiceExeption {
@@ -45,6 +47,11 @@ public class ServiceExeption {
 
   public void setErrors(List<String> errors) {
     this.errors = errors;
+  }
+
+  @Override
+  public String toString() {
+    return new Gson().toJson(this);
   }
 
 }
