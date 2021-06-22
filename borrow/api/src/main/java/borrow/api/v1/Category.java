@@ -21,11 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/v1/category")
 public class Category extends Entity<Category> {
 
-  private String servicePath = "/" + getClass().getSimpleName().toLowerCase();
-
   @Autowired
   public Category(WebClient webClient) {
     super(webClient);
+    servicePath = "/" + getClass().getSimpleName().toLowerCase();
   }
 
   @GetMapping("/id/{id}/item")

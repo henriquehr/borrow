@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 
 public class Entity<T> {
 
+  protected String servicePath;
   private String baseUrl = "";
   private WebClient webClient;
 
@@ -84,35 +85,35 @@ public class Entity<T> {
   @GetMapping("")
   @SuppressWarnings("unchecked")
   public ResponseEntity<List<T>> getAllEntities() {
-    return getEntity("", "", (Class<List<T>>)(Class<?>)List.class);
+    return getEntity(servicePath, "", (Class<List<T>>)(Class<?>)List.class);
   }
 
   @GetMapping("/id/{id}")
   @SuppressWarnings("unchecked")
   public ResponseEntity<List<T>> getEntitiesById(@PathVariable UUID id) {
-    return getEntity("", "id/" + id, (Class<List<T>>)(Class<?>)List.class);
+    return getEntity(servicePath, "/id/" + id, (Class<List<T>>)(Class<?>)List.class);
   }
 
   @GetMapping("/name/{name}")
   @SuppressWarnings("unchecked")
   public ResponseEntity<List<T>> getEntitiesByNameContaining(@PathVariable String name) {
-    return getEntity("", "name/" + name, (Class<List<T>>)(Class<?>)List.class);
+    return getEntity(servicePath, "/name/" + name, (Class<List<T>>)(Class<?>)List.class);
   }
 
   @GetMapping("/description/{description}")
   @SuppressWarnings("unchecked")
   public ResponseEntity<List<T>> getEntitiesByDescriptionContaining(@PathVariable String description) {
-    return getEntity("", "description/" + description, (Class<List<T>>)(Class<?>)List.class);
+    return getEntity(servicePath, "/description/" + description, (Class<List<T>>)(Class<?>)List.class);
   }
 
   @DeleteMapping("")
   public ResponseEntity<HttpStatus> deleteEntity(@RequestBody T entity) {
-    return deleteEntity("", "", entity);
+    return deleteEntity(servicePath, "", entity);
   }
 
   @DeleteMapping("/id/{id}")
   public ResponseEntity<HttpStatus> deleteAllEntityById(@PathVariable UUID id) {
-    return deleteEntity("", "id/" + id);
+    return deleteEntity(servicePath, "/id/" + id);
   }
 
 }

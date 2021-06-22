@@ -21,11 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/v1/user")
 public class User extends Entity<User> {
 
-  private String servicePath = "/" + getClass().getSimpleName().toLowerCase();
-
   @Autowired
   public User(WebClient webClient) {
     super(webClient);
+    servicePath = "/" + getClass().getSimpleName().toLowerCase();
   }
 
   @GetMapping("/id/{id}/name")

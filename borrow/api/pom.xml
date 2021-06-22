@@ -18,6 +18,18 @@
 	<dependencies>
     
     <dependency>
+      <groupId>borrow</groupId>
+      <artifactId>common</artifactId>
+      <version>0.0.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-data-cassandra</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
