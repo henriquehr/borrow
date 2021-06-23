@@ -19,10 +19,11 @@ import org.springframework.http.ResponseEntity;
 import borrow.common.entity.Category;
 import borrow.common.entity.keys.PrimaryKeyCategory;
 import borrow.common.repository.IRepository;
+import borrow.common.service.Service;
 
 class CategoryControllerTest {
   
-  Controller<Category> controller;
+  Service<Category> controller;
   IRepository<Category> repository;
   PrimaryKeyCategory key;
   String name;
@@ -46,7 +47,7 @@ class CategoryControllerTest {
     // category = new Category(key.getId(), key.getItemId(), name, description, LocalDateTime.now(), LocalDateTime.now());
     categoryList = List.of(category, category);
     repository = (IRepository<Category>) Mockito.mock(IRepository.class);
-    controller = new Controller<Category>(repository);
+    controller = new Service<Category>(repository);
     Mockito.when(repository.save(Mockito.any())).thenReturn(category);
     Mockito.when(repository.findAll()).thenReturn(categoryList);
     Mockito.when(repository.findById(key.getId())).thenReturn(Optional.of(category));

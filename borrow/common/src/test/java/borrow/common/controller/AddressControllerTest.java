@@ -19,10 +19,11 @@ import org.springframework.http.ResponseEntity;
 import borrow.common.entity.Address;
 import borrow.common.entity.keys.PrimaryKeyAddress;
 import borrow.common.repository.IRepository;
+import borrow.common.service.Service;
 
 class AddressControllerTest {
   
-  Controller<Address> controller;
+  Service<Address> controller;
   IRepository<Address> repository;
   PrimaryKeyAddress key;
   String name;
@@ -47,7 +48,7 @@ class AddressControllerTest {
               name, description, Date.from(Instant.now()), Date.from(Instant.now()));
     addressesList = List.of(address, address);
     repository = Mockito.mock(IRepository.class);
-    controller = new Controller<Address>(repository);
+    controller = new Service<Address>(repository);
     Mockito.when(repository.save(Mockito.any())).thenReturn(address);
     Mockito.when(repository.findAll()).thenReturn(addressesList);
     Mockito.when(repository.findById(key.getId())).thenReturn(Optional.of(address));

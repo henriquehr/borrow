@@ -19,12 +19,12 @@ import org.springframework.http.ResponseEntity;
 
 import borrow.common.entity.Item;
 import borrow.common.entity.keys.PrimaryKeyItem;
-import borrow.item.controller.ItemController;
 import borrow.item.repository.ItemRepository;
+import borrow.item.service.ItemService;
 
 class ItemControllerTest {
   
-  ItemController controller;
+  ItemService controller;
   ItemRepository repository;
   String name;
   String description;
@@ -47,7 +47,7 @@ class ItemControllerTest {
     item = new Item(key.getId(), key.getCategoryId(), name, description, url, rate, Date.from(Instant.now()), Date.from(Instant.now()));
     itemsList = List.of(item, item);
     repository = Mockito.mock(ItemRepository.class);
-    controller = new ItemController(repository);
+    controller = new ItemService(repository);
     Mockito.when(repository.save(Mockito.any())).thenReturn(item);
     Mockito.when(repository.findAll()).thenReturn(itemsList);
     Mockito.when(repository.findById(item.getKey().getId())).thenReturn(Optional.of(item));

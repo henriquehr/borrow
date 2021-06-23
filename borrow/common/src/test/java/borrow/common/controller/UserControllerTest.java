@@ -19,10 +19,11 @@ import org.springframework.http.ResponseEntity;
 import borrow.common.entity.User;
 import borrow.common.entity.keys.PrimaryKeyUser;
 import borrow.common.repository.IRepository;
+import borrow.common.service.Service;
 
 class UserControllerTest {
   
-  Controller<User> controller;
+  Service<User> controller;
   IRepository<User> repository;
   PrimaryKeyUser key;
   String name;
@@ -51,7 +52,7 @@ class UserControllerTest {
 
     usersList = List.of(user, user);
     repository = Mockito.mock(IRepository.class);
-    controller = new Controller<User>(repository);
+    controller = new Service<User>(repository);
     Mockito.when(repository.save(Mockito.any())).thenReturn(user);
     Mockito.when(repository.findAll()).thenReturn(usersList);
     Mockito.when(repository.findById(key.getId())).thenReturn(Optional.of(user));
