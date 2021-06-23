@@ -37,80 +37,50 @@ public class Service<T> {
 
   public ResponseEntity<List<T>> getAllEntities() {
     System.out.println("getAllEntities()");
-    try {
-      return Optional.of(repository.findAll()).
-                             map(x -> x.isEmpty() ? null : x).
-                             map(this::responseOk).
-                             orElseGet(this::responseNoContent);
+    return Optional.of(repository.findAll()).
+                            map(x -> x.isEmpty() ? null : x).
+                            map(this::responseOk).
+                            orElseGet(this::responseNoContent);
 
-    } catch (Exception e) {
-      System.out.println(Throwables.getStackTraceAsString(e));
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
   }
 
   public ResponseEntity<List<T>> getEntitiesById(UUID id) {
     System.out.println("getEntitiesById("+id+")");
-    try {
-      return Optional.of(repository.findAllByKeyId(id)).
-                                    map(e -> e.isEmpty() ? null : e).
-                                    map(this::responseOk).
-                                    orElseGet(this::responseNotFound);
+    return Optional.of(repository.findAllByKeyId(id)).
+                                  map(e -> e.isEmpty() ? null : e).
+                                  map(this::responseOk).
+                                  orElseGet(this::responseNotFound);
 
-    } catch (Exception e) {
-      System.out.println(Throwables.getStackTraceAsString(e));
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
   }
 
   public ResponseEntity<List<T>> getEntitiesByNameContaining(String name) {
     System.out.println("getEntitiesByNameContaining("+name+")");
-    try {
-      return Optional.of(repository.findAllByNameContaining(name)).
-                                    map(e -> e.isEmpty() ? null : e).
-                                    map(this::responseOk).
-                                    orElseGet(this::responseNotFound);
+    return Optional.of(repository.findAllByNameContaining(name)).
+                                  map(e -> e.isEmpty() ? null : e).
+                                  map(this::responseOk).
+                                  orElseGet(this::responseNotFound);
 
-    } catch (Exception e) {
-      System.out.println(Throwables.getStackTraceAsString(e));
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
   }
 
   public ResponseEntity<List<T>> getEntitiesByDescriptionContaining(String description) {
     System.out.println("getEntitiesByDescriptionContaining("+description+")");
-    try {
-      return Optional.of(repository.findAllByDescriptionContaining(description)).
-                                    map(e -> e.isEmpty() ? null : e).
-                                    map(this::responseOk).
-                                    orElseGet(this::responseNotFound);
+    return Optional.of(repository.findAllByDescriptionContaining(description)).
+                                  map(e -> e.isEmpty() ? null : e).
+                                  map(this::responseOk).
+                                  orElseGet(this::responseNotFound);
 
-    } catch (Exception e) {
-      System.out.println(Throwables.getStackTraceAsString(e));
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
   }
 
   public ResponseEntity<HttpStatus> deleteEntity(T entity) {
     System.out.println("deleteEntity("+entity+")");
-    try {
-      repository.delete(entity);
-      return responseNoContent();
-    } catch (Exception e) {
-      System.out.println(Throwables.getStackTraceAsString(e));
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    repository.delete(entity);
+    return responseNoContent();
   }
 
   public ResponseEntity<HttpStatus> deleteAllEntityById(UUID id) {
     System.out.println("deleteAllEntityById("+id+")");
-    try {
-      repository.deleteAllByKeyId(id);
-      return responseNoContent();
-    } catch (Exception e) {
-      System.out.println(Throwables.getStackTraceAsString(e));
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    repository.deleteAllByKeyId(id);
+    return responseNoContent();
   }
 
 }
