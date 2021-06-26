@@ -2,7 +2,8 @@ package borrow.api.v1;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
+
+import borrow.api.http.Http;
 
 import java.util.List;
 import java.util.Map;
@@ -22,25 +23,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class Category extends Entity<Category> {
 
   @Autowired
-  public Category(WebClient webClient) {
-    super(webClient);
+  public Category(Http httpClient) {
+    super(httpClient);
     servicePath = "/" + getClass().getSimpleName().toLowerCase();
   }
 
   @GetMapping("/id/{id}/item")
   @SuppressWarnings("unchecked")
   public ResponseEntity<List<UUID>> getCategoryAllItemsIds(@PathVariable UUID id) {
-    return getEntity(servicePath, "/id/" + id + "/item", (Class<List<UUID>>) (Class<?>) List.class);
+    return getHttpClient().get(getBaseUrl(), servicePath, "/id/" + id + "/item", (Class<List<UUID>>) (Class<?>) List.class);
   }
   
   @PostMapping("")
   public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-    return postEntity(servicePath, "", category, Category.class);
+    return getHttpClient().post(getBaseUrl(), servicePath, "", category, Category.class);
   }
 
   @PutMapping("") 
   public ResponseEntity<Category> updateCategory(@RequestBody Map<String, Category> categories) {
-    return putEntity(servicePath, "", categories, Category.class);
+    return getHttpClient().put(getBaseUrl(), servicePath, "", categories, Category.class);
   }
 
 }

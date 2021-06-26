@@ -2,7 +2,8 @@ package borrow.api.v1;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
+
+import borrow.api.http.Http;
 
 import java.util.List;
 import java.util.Map;
@@ -22,25 +23,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class Item extends Entity<Item> {
 
   @Autowired
-  public Item(WebClient webClient) {
-    super(webClient);
+  public Item(Http httpClient) {
+    super(httpClient);
     servicePath = "/" + getClass().getSimpleName().toLowerCase();
   }
 
   @GetMapping("/id/{id}/category")
   @SuppressWarnings("unchecked")
   public ResponseEntity<List<UUID>> getItemAllCategoriesIds(@PathVariable UUID id) {
-    return getEntity(servicePath, "/id/" + id + "/category", (Class<List<UUID>>)(Class<?>)List.class);
+    return getHttpClient().get(getBaseUrl(), servicePath, "/id/" + id + "/category", (Class<List<UUID>>)(Class<?>)List.class);
   }
   
   @PostMapping("")
   public ResponseEntity<Item> createItem(@RequestBody Item item) {
-    return postEntity(servicePath, "", item, Item.class);
+    return getHttpClient().post(getBaseUrl(), servicePath, "", item, Item.class);
   }
 
   @PutMapping("") 
   public ResponseEntity<Item> updateItem(@RequestBody Map<String, Item> items) {
-    return putEntity(servicePath, "", items, Item.class);
+    return getHttpClient().put(getBaseUrl(), servicePath, "", items, Item.class);
   }
 
 }
