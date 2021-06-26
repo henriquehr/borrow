@@ -18,6 +18,7 @@ import borrow.common.entity.keys.PrimaryKeyItem;
 import borrow.common.service.Service;
 import borrow.item.repository.ItemRepository;
 
+@org.springframework.stereotype.Service
 public class ItemService extends Service<Item> {
   
   @Autowired

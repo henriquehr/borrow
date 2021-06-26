@@ -18,6 +18,7 @@ import borrow.common.entity.keys.PrimaryKeyUser;
 import borrow.common.service.Service;
 import borrow.user.repository.UserRepository;
 
+@org.springframework.stereotype.Service
 public class UserService extends Service<User> {
   
   @Autowired

@@ -18,6 +18,7 @@ import borrow.common.entity.Category;
 import borrow.common.entity.keys.PrimaryKeyCategory;
 import borrow.common.service.Service;
 
+@org.springframework.stereotype.Service
 public class CategoryService extends Service<Category> {
   
   @Autowired
